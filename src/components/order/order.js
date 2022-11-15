@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useStore, useDispatch } from "react-redux";
 import { cleanProducts } from "../../actions";
 import useValidateInput from "../useValidateInput/useValidateInput";
@@ -31,10 +31,6 @@ const Order = () => {
     const confirmOrder = () => {
         checkContacts() ? console.log("Ошибок нет") : console.log("Ошибки");
 
-        /*const neworder = {
-            contact: "",
-            products
-        }*/
     }  
 
     const renderInputError = (type) => {

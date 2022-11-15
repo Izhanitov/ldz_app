@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import {NavLink} from 'react-router-dom';
 
@@ -6,8 +5,6 @@ const Header = () => {
 
     const counter = useSelector(state => state.products.length)
 
-    console.log("!!!!!!!!!!!!!!!!!!!!");
-    console.log(counter);
     return (
         <div className="container container-logo">
             <div className="row">

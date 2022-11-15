@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, delProduct } from "../../actions"
@@ -14,12 +14,8 @@ const ProductListElem = ({price, productid, catid, catname, productname, sizeid,
     
     useEffect(() => {
         if(firstload === true) {
-            console.log("ПЕРВАЯ ЗАГРУЗКА");
-            console.log(itemInStore);
             if(itemInStore.length > 0) {
                 setCount(itemInStore[0].count);
-                console.log("SSSSSSSET");
-                console.log(countitem);
             }
             setFirstLoad(false);
         }

@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import RestService from '../../services/restService';
+import { Component } from 'react';
 import {NavLink} from 'react-router-dom';
+
+import RestService from '../../services/restService';
 
 export default class StorePage extends Component {
     restService = new RestService();
@@ -12,10 +13,8 @@ export default class StorePage extends Component {
         this.updateData();
     }
 
-    onCategoriesLoaded = (categories) => {
-        //console.log(categories);               
-        this.setState({categories});  
-        //console.log(categories);      
+    onCategoriesLoaded = (categories) => {               
+        this.setState({categories}); 
     }
 
     updateData = () => {

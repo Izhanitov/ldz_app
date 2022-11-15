@@ -1,20 +1,15 @@
-import React, { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useStore } from "react-redux";
 import { NavLink } from "react-router-dom";
-//import { getProducts } from "../../actions";
+
 import ShoppingBasketItem from "../shoppingBasketItem/shoppingBasketItem";
 
 const ShoppingBasket = () => {    
     const store = useStore();
     const products = useMemo(() => store.getState().products, [store]);
     const [summary, setSummary] = useState(0);
-    //const [firstload, setFirstLoad] = useState(true);
 
-    //store.subscribe(() => console.log(products));
     store.subscribe(() => {
-        /*let mem = 0;
-        store.getState().products.map((product) => mem += product.count * product.price);
-        setSummary(mem);*/
         CountProducts();
     });
 
@@ -26,28 +21,9 @@ const ShoppingBasket = () => {
         let mem = 0;
         store.getState().products.map((product) => mem += product.count * product.price);
         setSummary(mem);
-    }
-    /*const collectStore = () => {
-        setSummary(0);
-        products.map((product) => setSummary(summary + product.count * product.price));
-    }*/
+    } 
 
-    /*useEffect(() => {
-        console.log("USESOSAT");
-        state.products.map(product => setSummary(summary + product.count * product.price));
-    }, [mem])*/
-
-    //const products = useMemo(() => state.products, []); 
-    
-    /*const summary = useMemo(() => {
-        console.log("КАБЛЯ!");
-        let count = 0;
-        products.map(product => count += product.count * product.price);
-        return count;
-    }, [mem])*/
-
-    const RenderSummary = () => {        
-        //collectStore();
+    const RenderSummary = () => { 
         return (
             <>
                 <div>
@@ -62,8 +38,7 @@ const ShoppingBasket = () => {
     }
 
     const RenderProducts = () => {
-        return products.map(product => {            
-            console.log("ААААААТЬ");
+        return products.map(product => {  
             return(
                 <div>
                     <ShoppingBasketItem product={product} />

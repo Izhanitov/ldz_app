@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import RestService from "../../services/restService";
-import { useDispatch } from "react-redux";
 
 
 import ProductListElem from "../productListElem/productListElem";
@@ -9,11 +8,8 @@ const ProductList = ({catid, catName}) => {
 
     const restService = new RestService();
 
-    const dispatch = useDispatch();
-
     const [products, setProducts] = useState({data: null});
     const [checkLoad, setCheckLoad] = useState(false);
-    //const [sizeList, setSizeList] = useState([]);
 
     const sizeList = useMemo(() => {
         return products?.data?.sizes?.$values?.map(size => {
@@ -27,13 +23,10 @@ const ProductList = ({catid, catName}) => {
              setCheckLoad(true);    
              setProducts({data: cat});
          });
-     }, []);
-
-    
+     }, []);    
     
 
-    const printProducts = (products) => {
-        //const name = product.name + " " + product.description  
+    const printProducts = (products) => { 
 
         return products.products.$values.map(product => { 
             const pkey = "product" + product.$id;

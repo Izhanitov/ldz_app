@@ -6,7 +6,6 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case 'ADD_PRODUCT':
-            console.log("1488");
             const existingProduct = state.products.find(item => item.id === action.payload.id && item.sizeid === action.payload.sizeid);
 
             if(existingProduct) {
