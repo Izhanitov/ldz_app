@@ -12,18 +12,19 @@ export default class RestService {
         return await res.json();
     }
 
-    getAllTasks = async () => {
-        const res = await this.getData(`Product`);
-        return res;
-    }
+    sendData = async (url, sendObject) => {
+        const res = await fetch(`${this._apiBase}${url}`, {method: "POST",
+                                        body: JSON.stringify(sendObject),
+                                        headers: {  'Content-type': 'application/json' }});  
 
-    getCategory = async (id) => {
-        const res = await this.getData(`category?id=${id}`);
-        return res;        
+        return res.status;
     }
+    
+    getAllTasks = async () => await this.getData(`Product`);
 
-    getCategoryProducts = async (id) => {
-        const res = await this.getData(`products?id=${id}`);
-        return res;        
-    }    
+    getCategory = async (id) => await this.getData(`category?id=${id}`)
+
+    getCategoryProducts = async (id) => await this.getData(`products?id=${id}`);          
+        
+    sendOrder = async (sendObject) => await this.sendData(`SendOrder`, sendObject);
 }
