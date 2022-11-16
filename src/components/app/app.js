@@ -26,7 +26,7 @@ export default class App extends Component {
                         <Routes>
                             <Route path="/factory" element={<Factory/>} />
                             <Route path="/" element={<Mainsection/>} />
-                            <Route path="/products" element={<StorePage/>} />
+                            <Route path="/store" element={<StorePage/>} />
                             <Route path="/category/:id" element={<Category/>} />
                             <Route path="/basket" element={<ShoppingBasket/>} />
                             <Route path="/order" element={<Order/>} />

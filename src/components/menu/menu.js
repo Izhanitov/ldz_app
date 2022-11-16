@@ -6,7 +6,7 @@ const Menu = () => {
             <div className="row">
                 <div className="col">О КОМПАНИИ</div>
                 <div className="col">
-                    <NavLink to="/products">ПРОДУКЦИЯ</NavLink></div>
+                    <NavLink to="/store">ПРОДУКЦИЯ</NavLink></div>
                 <div className="col">
                     <NavLink to="/factory">ПРОИЗВОДСТВО</NavLink>
                 </div>                
