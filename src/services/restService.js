@@ -19,12 +19,13 @@ export default class RestService {
 
         return res.status;
     }
+    "ControllerName/ActionName"
     
-    getAllTasks = async () => await this.getData(`Product`);
+    getCategories = async () => await this.getData(`Product/GetCategories`);
 
-    getCategory = async (id) => await this.getData(`category?id=${id}`)
+    getCategory = async (id) => await this.getData(`Product/GetCategory?id=${id}`)
 
-    getCategoryProducts = async (id) => await this.getData(`products?id=${id}`);          
+    getCategoryProducts = async (categoryId) => await this.getData(`Product/GetProducts?categoryId=${categoryId}`);          
         
-    sendOrder = async (sendObject) => await this.sendData(`SendOrder`, sendObject);
+    sendOrder = async (sendObject) => await this.sendData(`Order/AddOrder`, sendObject);
 }
