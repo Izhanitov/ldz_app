@@ -5,97 +5,115 @@ import useValidateInput from "../useValidateInput/useValidateInput";
 
 import RestService from "../../services/restService";
 
-const Order = () => {  
+const Order = () => {
+  const [checkValidInputs, setCheckValidInputs] = useState(false);
+  const [beforeConfirm, setBeforeConfirm] = useState(true);
 
-    const [checkValidInputs, setCheckValidInputs] = useState(false);
-    const [beforeConfirm, setBeforeConfirm] = useState(true);
+  const phone = useValidateInput("", "phone");
+  const email = useValidateInput("", "email");
+  const name = useValidateInput("", "name");
+  const secondname = useValidateInput("", "name");
+  const surname = useValidateInput("", "surname");
+  const region = useValidateInput("", "region");
+  const city = useValidateInput("", "city");
+  const building = useValidateInput("", "building");
 
-    const phone = useValidateInput("", "phone");
-    const email = useValidateInput("", "email");
-    const name = useValidateInput("", "name");
-    const surname = useValidateInput("", "surname");
-    const region = useValidateInput("", "region");
-    const city = useValidateInput("", "city");
-    const building = useValidateInput("", "building");
+  const allFields = useMemo(
+    () => [phone, email, name, surname, region, city, building],
+    [phone, email, name, surname, region, city, building]
+  );
 
-    const allFields = useMemo(() => [phone, email, name, surname, region, city, building], [phone, email, name, surname, region, city, building]);
+  const dispatch = useDispatch();
+  const restService = useMemo(() => new RestService(), [])
 
-    const dispatch = useDispatch();
-    const restService = new RestService();
+  const store = useStore();
+  const products = useMemo(() => store.getState().products, [store]);
 
-    const store = useStore();
-    const products = useMemo(() => store.getState().products, [store]);    
+  const checkContacts = useCallback(() => {
+    const check = allFields.every((field) => field.checkInput);
+    setCheckValidInputs(check);
+    setBeforeConfirm(false);
+    return check;
+  }, [allFields]);
 
-    const checkContacts = useCallback(() => {
-        const check = allFields.every(field => field.checkInput)
-        setCheckValidInputs(check);
-        setBeforeConfirm(false);
-        return check;
-    }, [allFields]);
+  const cleanStore = useCallback(() => {
+    dispatch(cleanProducts());
+  }, [dispatch])
 
-    const cleanStore = () => {
-        dispatch(cleanProducts());
-    }
-
-    const sendData = () => {
-        const bundle = {
-            name: name.value,
-            surname: surname.value,
-            region: region.value, 
-            city: city.value, 
-            building: building.value, 
-            phone: phone.value, 
-            email: email.value, 
-            products
-        }
-        
-        restService.sendOrder(bundle)
-                    .then(res => res === 200 ? cleanStore() : null)
-                    .error(err => console.log(err));
-    }
-
-    const confirmOrder = () => {
-        if(checkContacts())
-            sendData(); 
+  const sendData = useCallback(() => {
+    const bundle = {
+      name: name.value,
+      surname: surname.value,
+      region: region.value,
+      city: city.value,
+      building: building.value,
+      phone: phone.value,
+      email: email.value,
+      products,
     };
 
-    const renderInputError = (type) => {
-        return type.errorMessage === "" ? null : <span>{type.errorMessage}</span>
-    }
+    restService
+      .sendOrder(bundle)
+      .then((res) => (res === 200 ? cleanStore() : null))
+      .error((err) => console.log(err));
+  }, [cleanStore, products, name.value, surname.value, region.value, city.value, building.value, phone.value, email.value, restService])
 
-    return (
-        <div className="container">
-            <div className="row">
-                <div className="col-7">
-                    <h4>Имя</h4>
-                    <input onChange={name.onChange} value={name.value} style={{borderColor: name.errorMessage ? "Red" : "initial"}}></input>
-                    {renderInputError(name)}
-                    <h4>Фамилия</h4>
-                    <input onChange={surname.onChange} value={surname.value}></input>
-                    {renderInputError(surname)}
-                    <h4>Телефон</h4>
-                    <input onChange={phone.onChange} value={phone.value}></input>
-                    {renderInputError(phone)}
-                    <h4>Email</h4>
-                    <input onChange={email.onChange} value={email.value}></input>
-                    {renderInputError(email)}
-                    <h4>Регион</h4>
-                    <input onChange={region.onChange} value={region.value}></input>
-                    {renderInputError(region)}
-                    <h4>Город</h4>
-                    <input onChange={city.onChange} value={city.value}></input>
-                    {renderInputError(city)}
-                    <h4>Дом</h4>
-                    <input onChange={building.onChange} value={building.value}></input>
-                    {renderInputError(building)}                    
-                </div>
-            </div>
-            <div>                
-                <button onClick={() => confirmOrder()}>Отправить</button>
-                {checkValidInputs || beforeConfirm ? null : <span>Все поля должны быть заполнены!</span>} 
-            </div>
+  const confirmOrder = useCallback(() => {
+    if (checkContacts()) sendData();
+  }, [checkContacts, sendData])
+
+  const renderInputError = useCallback((type) => {
+    return type.errorMessage === "" ? null : <span className="text-danger">{type.errorMessage}</span>;
+  }, [])
+
+  return (
+    <div className="container mt-5">
+      <div className="row mb-2">
+        <div className="text-center">Контактные данные</div>
+      </div>      
+      <div className="row">
+        <div className="col-7">
+          <div>Имя</div>
+          <input className="form-control"
+            onChange={name.onChange}
+            value={name.value}
+            style={{ borderColor: name.errorMessage ? "Red" : "initial" }}
+          ></input>
+          {renderInputError(name)}
+          <div>Фамилия</div>
+          <input className="form-control" onChange={surname.onChange} value={surname.value}></input>
+          {renderInputError(surname)}
+          <div>Телефон</div>
+          <input className="form-control" onChange={phone.onChange} value={phone.value}></input>
+          {renderInputError(phone)}
+          <div>Email</div>
+          <input className="form-control" onChange={email.onChange} value={email.value}></input>
+          {renderInputError(email)}
+          <div>Регион</div>
+          <input className="form-control" onChange={region.onChange} value={region.value}></input>
+          {renderInputError(region)}
+          <div>Город</div>
+          <input className="form-control" onChange={city.onChange} value={city.value}></input>
+          {renderInputError(city)}
+          <div>Дом</div>
+          <input className="form-control" onChange={building.onChange} value={building.value}></input>
+          {renderInputError(building)}
         </div>
-    )
-}
+        <div className="col-5">
+          <div className="d-flex justify-content-center mt-4">
+            <img src="/img/end.png" alt="погрузчик" className="order-img"/>
+          </div>
+          <div className="d-flex justify-content-center mt-3">
+            <button className="basket-summary-confirmed" onClick={() => confirmOrder()}>Отправить</button>
+          </div>
+          {checkValidInputs || beforeConfirm ? null : (
+            <span className="text-danger text-center">Все поля должны быть заполнены!</span>
+          )}
+        </div>
+      </div>
+
+    </div>
+  );
+};
 
 export default Order;
