@@ -31,18 +31,27 @@ const ShoppingBasketItem = ({product}) => {
             }
         }
         setFirstLoad(false);
-    }, [countitem])
+    }, [countitem, product])
 
     if(countitem === 0) {
         return <></>
     } else {
         return(
             <>
-                <div>{catname + "." + productname + "    Цена: " + price + " ₽/шт. Количество: " + countitem + " шт. Всего: " + price*countitem + " ₽" }</div>
-                <button onClick={() => setCount(0)}>Удалить</button>
-                <button onClick={() => setCount(countitem - 1)}>-</button>
-                <input onChange={e => setCount(parseInt(e.currentTarget.value))} value={countitem}></input>
-                <button onClick={() => setCount(countitem + 1)}>+</button>
+                <div className="col-7 d-flex">
+                    <div className="align-self-center">{`${catname}. ${productname}. ${price} ₽/шт.`}</div>
+                </div>
+                <div className="col-2 text-center">
+                    <button className="product-button-manipulate" onClick={() => setCount(countitem - 1)}>-</button>
+                    <input className="product-count-input" onChange={e => setCount(parseInt(e.currentTarget.value))} value={countitem}></input>
+                    <button className="product-button-manipulate" onClick={() => setCount(countitem + 1)}>+</button>
+                </div> 
+                <div className="col-2 d-flex justify-content-center align-items-center">
+                    <div className="">{price*countitem}</div>
+                </div> 
+                <div className="col-1 text-center">
+                    <button className="product-button-delete" onClick={() => setCount(0)}>x</button>
+                </div>              
             </>
         )
     }
