@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import {NavLink} from 'react-router-dom';
 
 import RestService from '../../services/restService';
+import Spinner from '../spinner/spinner';
 
 const StorePage = () => {
-    const restService = new RestService();
+    const restService = useMemo(() => new RestService(), [])
 
     const [categories, setCategories] = useState({data: null});
     const [checkLoad, setCheckLoad] = useState(false);
@@ -13,15 +14,15 @@ const StorePage = () => {
         updateData();
     }, []);
 
-    const updateData = () => {
-        restService.getAllTasks()
+    const updateData = useCallback(() => {
+        restService.getCategories()
         .then(categories => {
             setCategories({data: categories})
             setCheckLoad(true);        
         });
-    }
+    }, [restService])
     
-    const renderItem = (item) => {
+    const renderItem = useCallback((item) => {
         
         const { categoryId, categoryName, lowPrice } = item;
 
@@ -47,10 +48,10 @@ const StorePage = () => {
                     </div>                      
                 </div>
         ) 
-    }  
+    }, [])  
 
     if (!checkLoad) {
-        return <h1>Загрузка</h1>
+        return <Spinner />
     }  else {
         return(
             <div className='container'>
