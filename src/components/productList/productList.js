@@ -1,12 +1,13 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import RestService from "../../services/restService";
 
 
 import ProductListElem from "../productListElem/productListElem";
+import Spinner from "../spinner/spinner";
 
 const ProductList = ({catid, catName}) => {
 
-    const restService = new RestService();
+    const restService = useMemo(() => new RestService(), [])
 
     const [products, setProducts] = useState({data: null});
     const [checkLoad, setCheckLoad] = useState(false);
@@ -26,7 +27,7 @@ const ProductList = ({catid, catName}) => {
      }, []);    
     
 
-    const printProducts = (products) => { 
+    const printProducts = useCallback((products) => { 
 
         return products.products.$values.map(product => { 
             const pkey = "product" + product.$id;
@@ -34,14 +35,14 @@ const ProductList = ({catid, catName}) => {
             const productName = product.name + " " + product.description;
                 
             return (
-                <div className="row" key={pkey}>
-                    <div className="col">{productName}</div>                    
+                <div className="row product-row justify-content-around mt-2" key={pkey}>
+                    <div className="col-4">{productName}</div>                    
                     { product.sizePrices.$values.map(size => {
                         const sizename = sizeList.find(item => item.sizeid === size.sizeid).desc;  
 
                         return ( 
-                            <div className="col price_tbl_elem">
-                                <ProductListElem className="col price_tbl_elem" 
+                            <div className="col-2 d-flex">
+                                <ProductListElem 
                                                     price={size.price} 
                                                     productid={product.productid} 
                                                     catid={catid}
@@ -56,19 +57,19 @@ const ProductList = ({catid, catName}) => {
                 </div>
                 )
         })
-    } 
+    }, [catName, catid, sizeList]) 
 
-    const printSizes = (sizes) => {
+    const printSizes = useCallback((sizes) => {
         return sizes.sizes.$values.map(size => {
-            return <div className="col price_tbl_elem" key={"size" + size.sizeid}>{size.desc + " мм. "}</div>
+            return <div className="col-2 text-center" key={"size" + size.sizeid}>{size.desc + " мм. "}</div>
         })    
-    }
+    }, [])
 
     if(checkLoad === true) {
         return(
             <div className="container">
-                <div className="row">
-                    <div className="col">Наименование</div>
+                <div className="row justify-content-around">
+                    <div className="col-4 text-center">Наименование</div>
                     {printSizes(products.data)}                    
                 </div>
                 {printProducts(products.data)}
@@ -76,9 +77,7 @@ const ProductList = ({catid, catName}) => {
         )
     } else {
         return(
-            <>
-                Загрузка...
-            </>
+            <Spinner />
         )
     }
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, delProduct } from "../../actions"
+import Spinner from "../spinner/spinner";
 
 const ProductListElem = ({price, productid, catid, catname, productname, sizeid, sizename}) => {  
 
@@ -44,19 +45,23 @@ const ProductListElem = ({price, productid, catid, catname, productname, sizeid,
         if(countitem === 0) {
             return(
                 <>
-                    <div>{price + " ₽/шт."}</div>
-                    <button onClick={() => setCount(1)}>В корзину</button>
+                    <div className="col-6 d-flex justify-content-center align-items-center">{price + " ₽/шт."}</div>
+                    <button className="col-6 product-button-add" onClick={() => setCount(1)}>В корзину</button>
                 </>
             ) 
         } else {
             return(
                 <>
-                    <div>{price + " ₽/шт."}</div>
-                    <div>
-                        <button onClick={() => setCount(0)}>✔ В корзине</button>
-                        <button onClick={() => setCount(countitem - 1)}>-</button>
-                        <input onChange={e => setCount(parseInt(e.currentTarget.value))} value={countitem}></input>
-                        <button onClick={() => setCount(countitem + 1)}>+</button>
+                    <div className="col-6 d-flex justify-content-center align-items-center">{price + " ₽/шт."}</div>
+                    <div className="col-6">
+                        <div className="text-center">
+                            <button className="product-button-added text-center" onClick={() => setCount(0)}>✔</button>
+                        </div>
+                        <div className="d-flex mt-1 justify-content-center">
+                            <button className="product-button-manipulate" onClick={() => setCount(countitem - 1)}>-</button>
+                            <input className="product-count-input" onChange={e => setCount(parseInt(e.currentTarget.value))} value={countitem}></input>
+                            <button className="product-button-manipulate" onClick={() => setCount(countitem + 1)}>+</button>
+                        </div>
                     </div>
                 </>
             )
@@ -64,7 +69,7 @@ const ProductListElem = ({price, productid, catid, catname, productname, sizeid,
     }
     else {
         
-        return <>Загрука...</>
+        return <Spinner />
     }
 }
 
